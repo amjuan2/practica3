@@ -15,7 +15,7 @@ plt.show()
 
 plt.clf()
 acc = history_dict["accuracy"]
-val_acc = history_dict["val_accurac y"]
+val_acc = history_dict["val_accuracy"]
 plt.plot(epochs, acc, "bo", label="Training acc")
 plt.plot(epochs, val_acc, "b", label="Validation acc")
 plt.title("Training and validation accuracy")
