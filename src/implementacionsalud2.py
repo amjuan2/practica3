@@ -13,23 +13,28 @@ data = response.json()
 
 # Convertir los datos a un DataFrame de Pandas
 df = pd.DataFrame(data)
-
 # Preprocesar los datos
 # Convertir la columna '_1_edad' a tipo numérico
 df['_1_edad'] = pd.to_numeric(df['_1_edad'], errors='coerce')
 # Eliminar filas con valores de edad faltantes o negativos
 df = df.dropna(subset=['_1_edad'])
 df = df[df['_1_edad'] >= 0]
+print(df['_1_edad'])
 # Convertir el género a variables dummy
 df['_2_g_nero'] = df['_2_g_nero'].map({'M': 0, 'F': 1})
+print(df['_2_g_nero'])
 # Convertir el conocimiento de anticonceptivos a tipo numérico
-df['_14_qu_m_todos_anticonceptivos'] = pd.to_numeric(df['_14_qu_m_todos_anticonceptivos'], errors='coerce')
+df['_14_qu_m_todos_anticonceptivos'] = df['_14_qu_m_todos_anticonceptivos']
 # Eliminar filas con valores de conocimiento de anticonceptivos faltantes
-df = df.dropna(subset=['_14_qu_m_todos_anticonceptivos'])
+
+print(df['_14_qu_m_todos_anticonceptivos'])
 
 # Dividir los datos en características (X) y etiquetas (y)
 X = df[['_1_edad', '_2_g_nero']].values
 y = df['_14_qu_m_todos_anticonceptivos'].values
+
+print(X)
+print(y)
 
 # Dividir los datos en conjuntos de entrenamiento y prueba
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=df['_2_g_nero'])

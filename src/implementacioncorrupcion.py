@@ -8,12 +8,12 @@ from tensorflow.keras import layers
 import matplotlib.pyplot as plt
 
 # Cargar el modelo IMDB preentrenado
-(train_data, _), (_, _) = imdb.load_data(num_words=10000)
+(train_data, _), (_, _) = imdb.load_data(num_words=100000)
 word_index = imdb.get_word_index()
 
 # Define un modelo
 model = keras.Sequential([
- layers.Dense(16, activation="relu"),
+ layers.Dense(32, activation="relu"),
  layers.Dense(16, activation="relu"),
  layers.Dense(1, activation="sigmoid")
 ])
@@ -29,7 +29,7 @@ response = requests.get(url)
 data = response.json()
 
 # Preprocesar el conjunto de datos
-def prep_data(data, max_len=10000):
+def prep_data(data, max_len=100000):
     processed_comments = []
     for item in data:
         comentario = item["comentario"]
@@ -38,7 +38,7 @@ def prep_data(data, max_len=10000):
         sequence = [word_index.get(word.lower(), 2) for word in comentario.split()]
         # Reemplaza los índices mayores a 9999 con 9999
         # para asegurarse de que todos los índices estén dentro del rango permitido.
-        sequence = [x if x < 10000 else 9999 for x in sequence]
+        sequence = [x if x < 100000 else 9999 for x in sequence]
         # Agregar valores adicionales a una secuencia para que tenga una longitud específica.
         pad_sequence = pad_sequences([sequence], maxlen=max_len)
         # Agrega la secuencia a la lista de comentarios procesados.
@@ -47,7 +47,7 @@ def prep_data(data, max_len=10000):
     return np.vstack(processed_comments)
 
 # Transformar comentarios en vectores
-def vectorize_sequences(sequences, dimension=10000):
+def vectorize_sequences(sequences, dimension=100000):
     # Crea una matriz de ceros
     results = np.zeros((len(sequences), dimension))
     for i, sequence in enumerate(sequences):
@@ -69,5 +69,11 @@ for i, item in enumerate(data):
     positividad = predictions[i][0] * 100
     print(f"Comentario: {comentario}")
     print("Sentimiento:", "Positivo" if predictions[i] > 0.5 else "Negativo")
+    '''if predictions[i] < 0.45:
+        print("Sentimiento:", "Negativo")
+    elif 0.45 <= predictions[i] <= 0.55:
+        print("Sentimiento:", "Neutral")
+    else:
+        print("Sentimiento:", "Positivo")'''
     print("Porcentaje de Positividad:", f"{positividad:.2f}%")
     print()
